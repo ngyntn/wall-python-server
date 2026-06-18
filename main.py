@@ -45,43 +45,13 @@ async def download_photo(url: str):
 
 @app.post("/api/ai/generate")
 def generate_ai(request: AIRequest):
-    # image_bytes = services.generate_image_hf(request.prompt)
-    #
-    # if image_bytes:
-    #     return Response(content=image_bytes, media_type="image/png")
-    # else:
-    #     raise HTTPException(status_code=500, detail="Generation Failed")
-    print(f"🛠️ [FAKE MODE] Đang giả lập tạo ảnh cho prompt: {request.prompt}")
+    image_bytes = services.generate_image_hf(request.prompt)
 
-    try:
-        # 1. Tạo ảnh màu ngẫu nhiên (Kích thước chuẩn Mobile)
-        width = 768
-        height = 1344
-        # Random màu RGB
-        color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-
-        # Tạo ảnh mới bằng Pillow
-        img = Image.new('RGB', (width, height), color=color)
-
-        # (Tuỳ chọn) Vẽ một hình chữ nhật ở giữa để nhìn cho đỡ chán
-        draw = ImageDraw.Draw(img)
-        draw.rectangle(
-            [(100, 400), (width - 100, height - 400)],
-            outline="white",
-            width=5
-        )
-
-        # 2. Chuyển đổi ảnh thành Bytes (giả lập y hệt API thật trả về)
-        img_byte_arr = io.BytesIO()
-        img.save(img_byte_arr, format='PNG')
-        fake_image_bytes = img_byte_arr.getvalue()
-
-        # 3. Trả về Client
-        return Response(content=fake_image_bytes, media_type="image/png")
-
-    except Exception as e:
-        print(f"Lỗi khi tạo ảnh fake: {e}")
-        raise HTTPException(status_code=500, detail="Fake Generation Failed")
+    if image_bytes:
+        return Response(content=image_bytes, media_type="image/png")
+    else:
+        raise HTTPException(status_code=500, detail="Generation Failed")
+   
 
 
 if __name__ == "__main__":
